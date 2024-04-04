@@ -1,6 +1,7 @@
 package courseselectionsystem.dao;
 
 import courseselectionsystem.entity.Condition;
+import courseselectionsystem.entity.ReportForm;
 import courseselectionsystem.entity.RequestInfo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,4 +22,8 @@ public interface UserDao {
 
     @Select("select max(id) from tb_choose_subject")
     Integer getMaxId();
+
+    @Insert("insert into tb_course_selection_report_form(report_id, data_kind, place, degree, college_amount, college_able_amount, major_amount, major_able_amount) " +
+            "values (#{reportId}, #{dataKind}, #{place}, #{degree}, #{collegeAmount}, #{collegeAbleAmount}, #{majorAmount}, #{majorAbleAmount})")
+    void insetReportForm(ReportForm form);
 }

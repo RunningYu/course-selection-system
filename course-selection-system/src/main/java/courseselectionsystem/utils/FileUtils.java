@@ -2,10 +2,12 @@ package courseselectionsystem.utils;
 
 import courseselectionsystem.dao.UserDao;
 import courseselectionsystem.entity.Condition;
+import courseselectionsystem.entity.ReportForm;
 import courseselectionsystem.entity.RequestInfo;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class FileUtils {
                 XSSFSheet sheet = xssfWorkbook.getSheetAt(i);
                 //获取最后一行的num，即总行数。此处从0开始
                 int maxRow = sheet.getLastRowNum();
+                int n = 0;
                 for (int row = 0; row <= maxRow; row++) {
                     //获取最后单元格num，即总单元格数 ***注意：此处从1开始计数***
                     int maxRol = sheet.getRow(row).getLastCellNum();
@@ -48,6 +51,44 @@ public class FileUtils {
                         System.out.print(sheet.getRow(row).getCell(rol) + "  ");
                     }
                     System.out.println();
+                    String s = String.valueOf(sheet.getRow(row).getCell(0));
+                    if (s.contains("本科情况-各省（市、区）招生情况统计")) {
+                        n = 1;
+                        row ++;
+                        continue;
+                    } else if (s.contains("专科情况-各省（市、区）招生情况统计")) {
+                        n = 2;
+                        row ++;
+                        continue;
+                    } else if (s.contains("本、专科招生情况统计")) {
+                        n = 3;
+                        row ++;
+                        continue;
+                    } else if (s.contains("相关院校招生情况统计")) {
+                        n = 4;
+                        row ++;
+                        continue;
+                    }
+                    ReportForm form = new ReportForm();
+                    form.setReportId(12);
+                    form.setPlace(String.valueOf(sheet.getRow(row).getCell(0)));
+                    form.setDegree(String.valueOf(sheet.getRow(row).getCell(1)));
+                    double d = Double.parseDouble(sheet.getRow(row).getCell(2) + "");
+                    form.setCollegeAmount((int) d);
+                    form.setCollegeAbleAmount(String.valueOf(sheet.getRow(row).getCell(3)));
+                    d = Double.parseDouble(sheet.getRow(row).getCell(4) + "");
+                    form.setMajorAmount((int) d);
+                    form.setMajorAbleAmount(String.valueOf(sheet.getRow(row).getCell(5)));
+                    if (n == 1) {
+                        form.setDataKind(1);
+                    } else if (n == 2) {
+                        form.setDataKind(2);
+                    } else if (n == 3) {
+                        form.setDataKind(3);
+                    } else if (n == 4) {
+                        form.setDataKind(4);
+                    }
+                    userDao.insetReportForm(form);
                 }
             }
 

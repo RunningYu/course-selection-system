@@ -24,6 +24,14 @@ public class ReportForm {
     private Integer reportId;
 
     /**
+     * 1-本科情况-各省（市、区）招生情况统计
+     * 2-专科情况-各省（市、区）招生情况统计
+     * 3-本、专科招生情况统计
+     * 4-相关院校招生情况统计
+     */
+    private Integer dataKind;
+
+    /**
      * 地区
      */
     private String place;
@@ -36,12 +44,12 @@ public class ReportForm {
     /**
      * 招生院校
      */
-    private String collegeAmount;
+    private Integer collegeAmount;
 
     /**
      * 可选报院校数
      */
-    private String college_able_amount;
+    private String collegeAbleAmount;
 
 
     /**
