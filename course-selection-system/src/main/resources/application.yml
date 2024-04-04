@@ -9,23 +9,11 @@ spring:
     prefix: classpath:/templates
     mode: HTML
   datasource:
-#    url: jdbc:mysql://rm-j6c2k7uyo6n6o2870no.mysql.rds.aliyuncs.com:3306/weblog?useSSL=false
-#    username: slx
-#    password: slx_9920
-    url: jdbc:mysql://localhost:3306/weblog?useSSL=false
-    username: root
-    password: 2000516
+    url: jdbc:mysql://rm-j6c2k7uyo6n6o2870no.mysql.rds.aliyuncs.com:3306/course-selection-system?useSSL=false
+    username: slx
+    password: slx_9920
+#    url: jdbc:mysql://localhost:3306/course-selection-system?useSSL=false
+#    username: root
+#    password: 2000516
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-canal:
-  server: 127.0.0.1:11111
-  destination: example
-logging:
-  level:
-    root: info
-    top:
-      javatool:
-        canal:
-          client:
-            client:
-              AbstractCanalClient: error
