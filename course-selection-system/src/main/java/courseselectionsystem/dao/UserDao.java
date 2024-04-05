@@ -4,6 +4,7 @@ import courseselectionsystem.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -40,4 +41,13 @@ public interface UserDao {
     @Insert("insert into tb_choose_major(place, college, subjects, major, contains_major, direction, subjects_request) " +
             "values (#{place}, #{college}, #{subjects}, #{major}, #{containsMajor}, #{direction}, #{subjectsRequest})")
     void insertChooseMajor(ChooseMajor chooseMajor);
+
+    @Select("select * from tb_user where number = #{number}")
+    User getUserByNumber(String number);
+
+    @Insert("insert into tb_user(number, password, username, headshot) values(#{number}, #{password}, #{username}, #{headshot})")
+    void addUser(UserRequest user);
+
+    @Update("update tb_user set username = #{username}, headshot = #{headshot}, school = #{school} where number = #{number}")
+    void userInfoModify(UserRequest user);
 }

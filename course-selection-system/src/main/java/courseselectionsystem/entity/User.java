@@ -19,7 +19,7 @@ import java.util.Date;
 public class User {
 
     /**
-     * 创建时间
+     * 主键id
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
