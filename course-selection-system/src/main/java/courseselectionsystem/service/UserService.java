@@ -1,6 +1,7 @@
 package courseselectionsystem.service;
 
 import courseselectionsystem.entity.UserRequest;
+import courseselectionsystem.entity.vo.MockSubjectsVO;
 import courseselectionsystem.utils.JsonResult;
 
 /**
@@ -13,4 +14,5 @@ public interface UserService {
     void userInfoModify(UserRequest user);
 
     JsonResult userInfo(String number);
+
 }

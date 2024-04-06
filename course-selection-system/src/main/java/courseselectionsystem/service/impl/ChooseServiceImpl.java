@@ -1,9 +1,11 @@
 package courseselectionsystem.service.impl;
 
 import courseselectionsystem.dao.ChooseDao;
+import courseselectionsystem.dao.UserDao;
 import courseselectionsystem.entity.*;
 import courseselectionsystem.entity.vo.*;
 import courseselectionsystem.service.ChooseService;
+import courseselectionsystem.service.UserService;
 import courseselectionsystem.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class ChooseServiceImpl implements ChooseService {
+
+    @Autowired
+    private UserDao userDao;
 
     @Autowired
     private ChooseDao chooseDao;
@@ -126,6 +131,65 @@ public class ChooseServiceImpl implements ChooseService {
         response.setBenZhuanInfo(list3);
         response.setCollegeInfo(list4);
         log.info("ChooseServiceImpl mySubjectsReport response:[{}]", response);
+
+        return JsonResult.success(response);
+    }
+
+    @Override
+    public JsonResult mockSubjectsSelect(User request) {
+        userDao.mockSubjectsSelect(request);
+
+        return JsonResult.success("模拟选课成功");
+    }
+
+    @Override
+    public JsonResult reallySubjectsSelect(User request) {
+        User user = userDao.getUserByNumber(request.getNumber());
+        if (user.getFirstSubject() != null && !user.getFirstSubject().equals("")) {
+            // 如果该学生已经选好科了的，则不能再次修改
+            return JsonResult.error("该学生已经选好了科，不能再次修改!");
+        }
+        // 统计相同选课组合的人数
+        int studentAmount = userDao.countStudentAmountOfSameSubjects(request) + 1;
+        // 安排班别，默认50人一班
+        int classNumber = 0;
+        if (studentAmount % 50 == 0) {
+            classNumber = studentAmount / 50;
+        } else {
+            classNumber = studentAmount / 50 + 1;
+        }
+        String clas = classNumber + "班";
+        request.setClas(clas);
+        userDao.reallySubjectsSelect(request);
+
+        return JsonResult.success("选课成功");
+    }
+
+    @Override
+    public JsonResult collegeMajorSituation(String college, String place, int page, int size) {
+        page = (page > 0) ? page : 1;
+        // 计算数据库表中查询的初始位置
+        int startIndex = (page - 1) * size;
+        List<CollegeMajorSituation> list = new ArrayList<>();
+        int total = 0;
+        // 如果院校名称college不为空，则根据大学名称来搜索
+        if (college != null && !college.equals("")) {
+            list = chooseDao.collegeMajorSituationListByCollege(college, startIndex, size);
+            total = chooseDao.getTotalOfCollegeMajorSituationByCollege(college);
+        }
+        // 如果地区place不为空，则根据地区来搜索
+        else if (place != null && !place.equals("")){
+            list = chooseDao.collegeMajorSituationListByPlace(place, startIndex, size);
+            total = chooseDao.getTotalOfCollegeMajorSituationByPlace(place);
+        }
+        // 如果college和place都为空，则全部都查询
+        else {
+            list = chooseDao.collegeMajorSituationList(startIndex, size);
+            total = chooseDao.getTotalOfCollegeMajorSituation();
+        }
+        CollegeMajorSituationVO response = new CollegeMajorSituationVO();
+        response.setList(list);
+        response.setTotal(total);
 
         return JsonResult.success(response);
     }

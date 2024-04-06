@@ -1,5 +1,8 @@
 package courseselectionsystem.service;
 
+import courseselectionsystem.entity.User;
+import courseselectionsystem.entity.vo.MockSubjectsVO;
+import courseselectionsystem.entity.vo.ReallySubjectsVO;
 import courseselectionsystem.utils.JsonResult;
 
 /**
@@ -16,4 +19,10 @@ public interface ChooseService {
     JsonResult chooseMajorBySubjects(String place, String subjects, String college, int page, int size);
 
     JsonResult mySubjectsReport(String subjects);
+
+    JsonResult mockSubjectsSelect(User request);
+
+    JsonResult reallySubjectsSelect(User request);
+
+    JsonResult collegeMajorSituation(String college, String place, int page, int size);
 }

@@ -1,6 +1,7 @@
 package courseselectionsystem.dao;
 
 import courseselectionsystem.entity.*;
+import courseselectionsystem.entity.vo.MockSubjectsVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -50,4 +51,16 @@ public interface UserDao {
 
     @Update("update tb_user set username = #{username}, headshot = #{headshot}, school = #{school} where number = #{number}")
     void userInfoModify(UserRequest user);
+
+    @Update("update tb_user set mock_subjects = #{mockSubjects} where number = number")
+    void mockSubjectsSelect(User request);
+
+    /**
+     * 统计相同选课的学生人数
+     */
+    @Select("select count(*) from tb_user where first_subject = #{firstSubject} and secondary_subjects = #{secondarySubjects}")
+    int countStudentAmountOfSameSubjects(User user);
+
+    @Update("update tb_user set clas = #{clas}, first_subject = #{firstSubject}, secondary_subjects = #{secondarySubjects} where number = number")
+    void reallySubjectsSelect(User request);
 }

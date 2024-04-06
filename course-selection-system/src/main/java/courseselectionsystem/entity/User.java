@@ -62,7 +62,13 @@ public class User {
     /**
      * 次选科目（化学、生物、政治、地理）
      */
-    private String secondarySubject;
+    private String secondarySubjects;
+
+    /**
+     * 模拟选课组合
+     */
+    private String mockSubjects;
+
 
     /**
      * 所在地区

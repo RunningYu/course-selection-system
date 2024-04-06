@@ -1,6 +1,7 @@
 package courseselectionsystem.dao;
 
 import courseselectionsystem.entity.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -39,4 +40,22 @@ public interface ChooseDao {
 
     @Select("select * from tb_course_selection_report_form where report_id = #{reportId} and data_kind = #{dataKind}")
     List<ReportForm> getMySubjectsReportFrom(int reportId, int dataKind);
+
+    @Select("select * from tb_college_major_situation where college = #{college} limit #{startIndex}, #{size}")
+    List<CollegeMajorSituation> collegeMajorSituationListByCollege(String college, int startIndex, int size);
+
+    @Select("select * from tb_college_major_situation where province = #{place} or city = #{place} limit #{startIndex}, #{size}")
+    List<CollegeMajorSituation> collegeMajorSituationListByPlace(String place, int startIndex, int size);
+
+    @Select("select * from tb_college_major_situation limit #{startIndex}, #{size}")
+    List<CollegeMajorSituation> collegeMajorSituationList(int startIndex, int size);
+
+    @Select("select count(*) from tb_college_major_situation")
+    int getTotalOfCollegeMajorSituation();
+
+    @Select("select count(*) from tb_college_major_situation where college = #{college}")
+    int getTotalOfCollegeMajorSituationByCollege(String college);
+
+    @Select("select count(*) from tb_college_major_situation where province = #{place} or city = #{place}")
+    int getTotalOfCollegeMajorSituationByPlace(String place);
 }

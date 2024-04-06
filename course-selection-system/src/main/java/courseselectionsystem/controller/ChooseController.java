@@ -1,7 +1,10 @@
 package courseselectionsystem.controller;
 
+import courseselectionsystem.entity.User;
 import courseselectionsystem.entity.UserRequest;
 import courseselectionsystem.entity.vo.ChooseSubjectVO;
+import courseselectionsystem.entity.vo.MockSubjectsVO;
+import courseselectionsystem.entity.vo.ReallySubjectsVO;
 import courseselectionsystem.service.ChooseService;
 import courseselectionsystem.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
@@ -24,18 +27,37 @@ public class ChooseController {
     private ChooseService chooseService;
 
     /**
-     * todo: 业务待确定
-     * @param user
+     * 模拟选课
+     * @param request
      * @return
      */
-    @PostMapping("/mock/subject/select")
-    public JsonResult mockSubjectSelect(@RequestBody UserRequest user) {
-        log.info("UserController userInfoModify user:[{}]", user);
-        //userService.mockSubjectSelect(user);
+    @PostMapping("/subjects/mock/select")
+    public JsonResult mockSubjectsSelect(@RequestBody User request) {
+        log.info("UserController mockSubjectSelect request:[{}]", request);
+        JsonResult response = chooseService.mockSubjectsSelect(request);
 
-        return JsonResult.success();
+        return response;
     }
 
+    /**
+     * 真实选科
+     * @param request
+     * @return
+     */
+    @PostMapping("/subjects/really/select")
+    public JsonResult reallySubjectsSelect(@RequestBody User request) {
+        log.info("UserController reallySubjectsSelect request:[{}]", request);
+        JsonResult response = chooseService.reallySubjectsSelect(request);
+
+        return response;
+    }
+
+    /**
+     * 选定专业/院校来选科
+     * @param term
+     * @param degree
+     * @return
+     */
     @GetMapping("/choose/subject")
     public JsonResult chooseSubject(@Param("term") String term, @Param("degree") String degree) {
         log.info("UserController chooseSubjectByMajor term:[{}], degree:[{}]", term, degree);
@@ -99,6 +121,15 @@ public class ChooseController {
     public JsonResult mySubjectsReport(@Param("subjects") String subjects) {
         log.info("UserController mySubjectsReport subjects:[{}]", subjects);
         JsonResult response = chooseService.mySubjectsReport(subjects);
+
+        return response;
+    }
+
+    @GetMapping("/college/major/situation")
+    public JsonResult CollegeMajorSituation(@Param("college") String college, @Param("place") String place,
+                                            @Param("page") int page, @Param("size") int size) {
+        log.info("UserController mySubjectsReport college:[{}], place:[{}], page:[{}], size:[{}]", college, place, page, size);
+        JsonResult response = chooseService.collegeMajorSituation(college, place, page, size);
 
         return response;
     }
