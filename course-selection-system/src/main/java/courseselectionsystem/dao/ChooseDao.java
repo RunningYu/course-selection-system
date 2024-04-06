@@ -58,4 +58,10 @@ public interface ChooseDao {
 
     @Select("select count(*) from tb_college_major_situation where province = #{place} or city = #{place}")
     int getTotalOfCollegeMajorSituationByPlace(String place);
+
+    @Select("select * from tb_major_info where kind = #{kind} limit #{startIndex}, #{size}")
+    List<Major> majorInfoList(String kind, int startIndex, int size);
+
+    @Select("select count(*) from tb_major_info where kind = #{kind}")
+    int getTotalMajorByKind(String kind);
 }

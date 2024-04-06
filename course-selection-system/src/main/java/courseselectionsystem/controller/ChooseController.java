@@ -1,10 +1,6 @@
 package courseselectionsystem.controller;
 
 import courseselectionsystem.entity.User;
-import courseselectionsystem.entity.UserRequest;
-import courseselectionsystem.entity.vo.ChooseSubjectVO;
-import courseselectionsystem.entity.vo.MockSubjectsVO;
-import courseselectionsystem.entity.vo.ReallySubjectsVO;
 import courseselectionsystem.service.ChooseService;
 import courseselectionsystem.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
@@ -125,6 +121,14 @@ public class ChooseController {
         return response;
     }
 
+    /**
+     * 院校学科情况
+     * @param college 院校名称
+     * @param place 地区
+     * @param page 第几页
+     * @param size 一页的大小
+     * @return
+     */
     @GetMapping("/college/major/situation")
     public JsonResult CollegeMajorSituation(@Param("college") String college, @Param("place") String place,
                                             @Param("page") int page, @Param("size") int size) {
@@ -133,5 +137,27 @@ public class ChooseController {
 
         return response;
     }
+
+    /**
+     * 专业解析
+     */
+    @GetMapping("/major/list")
+    public JsonResult majorInfoList(@Param("kind") String kind, @Param("page") int page, @Param("size") int size) {
+        log.info("UserController majorInfoList kind:[{}], page:[{}], size:[{}]", kind, page, size);
+        JsonResult response = chooseService.majorInfoList(kind, page, size);
+
+        return response;
+    }
+
+
+    /**
+     * todo:知识文件分享
+     */
+
+    /**
+     * todo:排课表
+     */
+
+
 
 }

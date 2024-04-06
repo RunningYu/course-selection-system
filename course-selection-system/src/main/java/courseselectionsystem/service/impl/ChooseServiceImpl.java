@@ -5,7 +5,6 @@ import courseselectionsystem.dao.UserDao;
 import courseselectionsystem.entity.*;
 import courseselectionsystem.entity.vo.*;
 import courseselectionsystem.service.ChooseService;
-import courseselectionsystem.service.UserService;
 import courseselectionsystem.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,6 +187,20 @@ public class ChooseServiceImpl implements ChooseService {
             total = chooseDao.getTotalOfCollegeMajorSituation();
         }
         CollegeMajorSituationVO response = new CollegeMajorSituationVO();
+        response.setList(list);
+        response.setTotal(total);
+
+        return JsonResult.success(response);
+    }
+
+    @Override
+    public JsonResult majorInfoList(String kind, int page, int size) {
+        page = (page > 0) ? page : 1;
+        // 计算数据库表中查询的初始位置
+        int startIndex = (page - 1) * size;
+        List<Major> list = chooseDao.majorInfoList(kind, startIndex, size);
+        int total = chooseDao.getTotalMajorByKind(kind);
+        MajorListVO response = new MajorListVO();
         response.setList(list);
         response.setTotal(total);
 
