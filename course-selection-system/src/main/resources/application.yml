@@ -16,4 +16,13 @@ spring:
 #    username: root
 #    password: 2000516
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 100MB     # 设置单个文件大小
+      max-request-size: 100MB  # 设置单次请求文件的总大小
 
+minio:
+  endpoint: http://124.71.110.30:9000
+  accessKey: minio
+  secretKey: minio123
+  bucket: file

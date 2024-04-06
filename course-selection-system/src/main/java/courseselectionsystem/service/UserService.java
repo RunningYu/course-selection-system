@@ -3,6 +3,7 @@ package courseselectionsystem.service;
 import courseselectionsystem.entity.UserRequest;
 import courseselectionsystem.entity.vo.MockSubjectsVO;
 import courseselectionsystem.utils.JsonResult;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -15,4 +16,7 @@ public interface UserService {
 
     JsonResult userInfo(String number);
 
+    JsonResult knowledgeShare(MultipartFile file, String fileName, String author, String subject);
+
+    JsonResult knowledgeList(String subject, int page, int page1);
 }

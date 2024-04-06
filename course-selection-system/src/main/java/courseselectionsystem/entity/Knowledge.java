@@ -22,14 +22,14 @@ public class Knowledge {
     private Integer id;
 
     /**
-     * 标题
+     * 知识文件名
      */
-    private String title;
+    private String fileName;
 
     /**
-     * 内容
+     * 知识文件url
      */
-    private String content;
+    private String fileUrl;
 
     /**
      * 作者

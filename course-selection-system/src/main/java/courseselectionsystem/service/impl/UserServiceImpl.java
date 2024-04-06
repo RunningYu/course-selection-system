@@ -3,16 +3,19 @@ package courseselectionsystem.service.impl;
 import com.github.benmanes.caffeine.cache.Cache;
 import courseselectionsystem.Mapping.ConvertMapping;
 import courseselectionsystem.dao.UserDao;
-import courseselectionsystem.entity.User;
-import courseselectionsystem.entity.UserRequest;
-import courseselectionsystem.entity.UserResponse;
+import courseselectionsystem.entity.*;
+import courseselectionsystem.entity.vo.KnowledgeListVO;
 import courseselectionsystem.service.UserService;
 import courseselectionsystem.utils.JsonResult;
 import courseselectionsystem.utils.JwtUtils;
 import courseselectionsystem.utils.MD5Util;
+import courseselectionsystem.utils.MinioUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -21,6 +24,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private MinioUtil minioUtil;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -81,5 +87,36 @@ public class UserServiceImpl implements UserService {
         }
 
         return JsonResult.success(user);
+    }
+
+    @Override
+    public JsonResult knowledgeShare(MultipartFile file, String fileName, String author, String subject) {
+        UploadResponse fileResponse = minioUtil.uploadFile(file, "file");
+        String fileUrl = fileResponse.getMinIoUrl();
+        log.info("UserServiceImpl knowledgeShare fileUrl:[{}]", fileUrl);
+        userDao.knowledgeShare(fileUrl, fileName, author, subject);
+
+        return JsonResult.success("知识分享成共");
+    }
+
+    @Override
+    public JsonResult knowledgeList(String subject, int page, int size) {
+        page = (page > 0 ? page : 1);
+        int startIndex = (page - 1) * size;
+        List<Knowledge> list = null;
+        int total = 0;
+        // 如果传了全部，则全部知识查找，否则根据科目来查找
+        if (subject.equals("全部")) {
+            list = userDao.knowledgeListAll(startIndex, size);
+            total = userDao.getTotalKnowledgeAll();
+        } else {
+            list = userDao.knowledgeListBySubject(subject, startIndex, size);
+            total = userDao.getTotalKnowledgeBySubject(subject);
+        }
+        KnowledgeListVO response = new KnowledgeListVO();
+        response.setList(list);
+        response.setTotal(total);
+
+        return JsonResult.success(response);
     }
 }

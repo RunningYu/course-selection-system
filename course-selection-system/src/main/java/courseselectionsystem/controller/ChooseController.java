@@ -6,10 +6,8 @@ import courseselectionsystem.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -149,10 +147,18 @@ public class ChooseController {
         return response;
     }
 
-
     /**
-     * todo:知识文件分享
+     * 专业解析详情
+     * @return
      */
+    @GetMapping("/major/info")
+    public JsonResult majorInfo(@Param("id") int id) {
+        log.info("UserController majorInfo id:[{}]", id);
+        JsonResult response = chooseService.majorInfo(id);
+
+        return response;
+    }
+
 
     /**
      * todo:排课表

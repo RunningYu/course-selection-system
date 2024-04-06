@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
  * @author : 其然乐衣Letitbe
  * @date : 2024/4/4
@@ -63,4 +65,19 @@ public interface UserDao {
 
     @Update("update tb_user set clas = #{clas}, first_subject = #{firstSubject}, secondary_subjects = #{secondarySubjects} where number = number")
     void reallySubjectsSelect(User request);
+
+    @Insert("insert into tb_knowledge(file_url, file_name, author, subject) values (#{fileUrl}, #{fileName}, #{author}, #{subject})")
+    void knowledgeShare(String fileUrl, String fileName, String author, String subject);
+
+    @Select("select * from tb_knowledge where subject = #{subject} limit #{startIndex}, #{size}")
+    List<Knowledge> knowledgeListBySubject(String subject, int startIndex, int size);
+
+    @Select("select count(*) from tb_knowledge where subject = #{subject}")
+    int getTotalKnowledgeBySubject(String subject);
+
+    @Select("select * from tb_knowledge limit #{startIndex}, #{size}")
+    List<Knowledge> knowledgeListAll(int startIndex, int size);
+
+    @Select("select count(*) from tb_knowledge")
+    int getTotalKnowledgeAll();
 }

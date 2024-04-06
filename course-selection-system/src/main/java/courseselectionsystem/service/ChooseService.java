@@ -27,4 +27,6 @@ public interface ChooseService {
     JsonResult collegeMajorSituation(String college, String place, int page, int size);
 
     JsonResult majorInfoList(String kind, int page, int size);
+
+    JsonResult majorInfo(int id);
 }

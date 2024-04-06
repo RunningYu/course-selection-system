@@ -206,4 +206,11 @@ public class ChooseServiceImpl implements ChooseService {
 
         return JsonResult.success(response);
     }
+
+    @Override
+    public JsonResult majorInfo(int id) {
+        Major major = chooseDao.majorInfo(id);
+
+        return JsonResult.success(major);
+    }
 }

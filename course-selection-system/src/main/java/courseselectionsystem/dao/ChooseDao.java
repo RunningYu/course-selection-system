@@ -64,4 +64,7 @@ public interface ChooseDao {
 
     @Select("select count(*) from tb_major_info where kind = #{kind}")
     int getTotalMajorByKind(String kind);
+
+    @Select("select * from tb_major_info where id = #{id}")
+    Major majorInfo(int id);
 }
