@@ -100,6 +100,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public JsonResult knowledgeDelete(String number, int id) {
+        log.info("UserServiceImpl knowledgeDelete id:[{}], number:[{}]", id, number);
+        if (number == null || "".equals(number)) {
+            return JsonResult.error(500, "请先登录");
+        }
+        userDao.knowledgeDelete(number, id);
+
+        return JsonResult.success("删除成功");
+    }
+
+    @Override
     public JsonResult knowledgeList(String subject, int page, int size) {
         page = (page > 0 ? page : 1);
         int startIndex = (page - 1) * size;

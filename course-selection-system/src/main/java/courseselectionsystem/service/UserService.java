@@ -19,4 +19,6 @@ public interface UserService {
     JsonResult knowledgeShare(MultipartFile file, String fileName, String author, String subject);
 
     JsonResult knowledgeList(String subject, int page, int page1);
+
+    JsonResult knowledgeDelete(String number, int id);
 }

@@ -4,12 +4,15 @@ import courseselectionsystem.entity.UploadResponse;
 import courseselectionsystem.entity.UserRequest;
 import courseselectionsystem.service.UserService;
 import courseselectionsystem.utils.JsonResult;
+import courseselectionsystem.utils.JwtUtils;
 import courseselectionsystem.utils.MinioUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -18,6 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 public class UserController {
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Autowired
     private UserService userService;
@@ -56,8 +62,18 @@ public class UserController {
     }
 
     @PostMapping("/user/info/modify")
-    public JsonResult userInfoModify(@RequestBody UserRequest user) {
+    public JsonResult userInfoModify(HttpServletRequest httpServletRequest, @RequestBody UserRequest user) {
         log.info("UserController userInfoModify user:[{}]", user);
+        String token = httpServletRequest.getHeader("Authorization");
+        if (token == null || "".equals(token)) {
+            return JsonResult.error("请先登录");
+        }
+        String number = jwtUtils.getNumberByToken(token);
+        if (number == null) {
+            return JsonResult.error("Authorization 过期或失效！");
+        }
+        user.setNumber(number);
+        log.info("UserController userInfoModify number:[{}]", number);
         userService.userInfoModify(user);
 
         return JsonResult.success();
@@ -73,6 +89,19 @@ public class UserController {
                                      @RequestParam("subject") String subject) {
         log.info("UserController knowledgeShare file:[{}], fileName:[{}], author:[{}], subject:[{}]", file, fileName, author, subject);
         JsonResult response = userService.knowledgeShare(file, fileName, author, subject);
+
+        return response;
+    }
+
+    /**
+     * 知识文件删除
+     */
+    @GetMapping("/knowledge/delete")
+    public JsonResult knowledgeDelete(HttpServletRequest httpServletRequest, @RequestParam("id") int id) {
+        String token = httpServletRequest.getHeader("Authorization");
+        log.info("UserController knowledgeDelete id:[{}], token:[{}]", id, token);
+        String number = jwtUtils.getNumberByToken(token);
+        JsonResult response = userService.knowledgeDelete(number, id);
 
         return response;
     }

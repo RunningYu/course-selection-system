@@ -148,4 +148,19 @@ public class JwtUtils {
         }
         return claims;
     }
+
+    public String getNumberByToken(String token) {
+        String number = null;
+        if (token != null && !"".equals(token)) {
+            // 获取有效载荷
+            Claims claims = getClaimsFromToken(token);
+            if (claims == null) {
+                return null;
+            }
+            // 解析token后，从有效载荷取出值
+            number = (String) claims.get("number");
+        }
+
+        return number;
+    }
 }

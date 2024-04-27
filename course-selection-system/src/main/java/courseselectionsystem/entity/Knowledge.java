@@ -22,6 +22,11 @@ public class Knowledge {
     private Integer id;
 
     /**
+     * 学号
+     */
+    private String number;
+
+    /**
      * 知识文件名
      */
     private String fileName;

@@ -80,4 +80,7 @@ public interface UserDao {
 
     @Select("select count(*) from tb_knowledge")
     int getTotalKnowledgeAll();
+
+    @Select("update tb_knowledge set is_delete = 1 where id = #{id} and number = #{number}")
+    void knowledgeDelete(String number, int id);
 }

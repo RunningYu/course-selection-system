@@ -3,11 +3,14 @@ package courseselectionsystem.controller;
 import courseselectionsystem.entity.User;
 import courseselectionsystem.service.ChooseService;
 import courseselectionsystem.utils.JsonResult;
+import courseselectionsystem.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author : 其然乐衣Letitbe
@@ -18,6 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ChooseController {
 
     @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
     private ChooseService chooseService;
 
     /**
@@ -26,8 +32,18 @@ public class ChooseController {
      * @return
      */
     @PostMapping("/subjects/mock/select")
-    public JsonResult mockSubjectsSelect(@RequestBody User request) {
+    public JsonResult mockSubjectsSelect(HttpServletRequest httpServletRequest, @RequestBody User request) {
         log.info("UserController mockSubjectSelect request:[{}]", request);
+        String token = httpServletRequest.getHeader("Authorization");
+        if (token == null || "".equals(token)) {
+            return JsonResult.error("请先登录");
+        }
+        String number = jwtUtils.getNumberByToken(token);
+        if (number == null) {
+            return JsonResult.error("Authorization 过期或失效！");
+        }
+        request.setNumber(number);
+        log.info("UserController mockSubjectSelect number:[{}]", number);
         JsonResult response = chooseService.mockSubjectsSelect(request);
 
         return response;
@@ -39,8 +55,18 @@ public class ChooseController {
      * @return
      */
     @PostMapping("/subjects/really/select")
-    public JsonResult reallySubjectsSelect(@RequestBody User request) {
+    public JsonResult reallySubjectsSelect(HttpServletRequest httpServletRequest, @RequestBody User request) {
         log.info("UserController reallySubjectsSelect request:[{}]", request);
+        String token = httpServletRequest.getHeader("Authorization");
+        if (token == null || "".equals(token)) {
+            return JsonResult.error("请先登录");
+        }
+        String number = jwtUtils.getNumberByToken(token);
+        if (number == null) {
+            return JsonResult.error("Authorization 过期或失效！");
+        }
+        request.setNumber(number);
+        log.info("UserController mockSubjectSelect number:[{}]", number);
         JsonResult response = chooseService.reallySubjectsSelect(request);
 
         return response;
