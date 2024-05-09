@@ -67,4 +67,10 @@ public interface ChooseDao {
 
     @Select("select * from tb_major_info where id = #{id}")
     Major majorInfo(int id);
+
+    @Select("select * from tb_major_info limit #{startIndex}, #{size}")
+    List<Major> majorInfoListAll(int startIndex, int size);
+
+    @Select("select count(*) from tb_major_info")
+    int getTotalMajorAll();
 }

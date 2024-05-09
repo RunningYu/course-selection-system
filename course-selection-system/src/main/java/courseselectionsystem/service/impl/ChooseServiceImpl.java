@@ -106,8 +106,8 @@ public class ChooseServiceImpl implements ChooseService {
 
     @Override
     public JsonResult mySubjectsReport(String subjects) {
-        String[] s = subjects.split(" ");
-        subjects = s[0] + "+" + s[1] + "+" + s[2];
+//        String[] s = subjects.split(" ");
+//        subjects = s[0] + "+" + s[1] + "+" + s[2];
         Report report = chooseDao.mySubjectsReport(subjects);
         if (report == null) {
             return JsonResult.error("暂无该数据结果");
@@ -198,8 +198,15 @@ public class ChooseServiceImpl implements ChooseService {
         page = (page > 0) ? page : 1;
         // 计算数据库表中查询的初始位置
         int startIndex = (page - 1) * size;
-        List<Major> list = chooseDao.majorInfoList(kind, startIndex, size);
-        int total = chooseDao.getTotalMajorByKind(kind);
+        List<Major> list = null;
+        int total = 0;
+        if (kind.equals("全部")) {
+            list = chooseDao.majorInfoListAll(startIndex, size);
+            total = chooseDao.getTotalMajorAll();
+        } else {
+            list = chooseDao.majorInfoList(kind, startIndex, size);
+            total = chooseDao.getTotalMajorByKind(kind);
+        }
         MajorListVO response = new MajorListVO();
         response.setList(list);
         response.setTotal(total);

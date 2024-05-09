@@ -90,11 +90,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonResult knowledgeShare(MultipartFile file, String fileName, String author, String subject) {
-        UploadResponse fileResponse = minioUtil.uploadFile(file, "file");
-        String fileUrl = fileResponse.getMinIoUrl();
-        log.info("UserServiceImpl knowledgeShare fileUrl:[{}]", fileUrl);
-        userDao.knowledgeShare(fileUrl, fileName, author, subject);
+    public JsonResult knowledgeShare(String file, String fileName, String author, String subject) {
+//        UploadResponse fileResponse = minioUtil.uploadFile(file, "file");
+//        String fileUrl = fileResponse.getMinIoUrl();
+//        log.info("UserServiceImpl knowledgeShare fileUrl:[{}]", fileUrl);
+        userDao.knowledgeShare(file, fileName, author, subject);
 
         return JsonResult.success("知识分享成共");
     }

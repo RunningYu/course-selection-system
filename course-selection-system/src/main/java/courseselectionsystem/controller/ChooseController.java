@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,15 +34,6 @@ public class ChooseController {
     public JsonResult mockSubjectsSelect(HttpServletRequest httpServletRequest, @RequestBody User request) {
         log.info("UserController mockSubjectSelect request:[{}]", request);
         String token = httpServletRequest.getHeader("Authorization");
-        if (token == null || "".equals(token)) {
-            return JsonResult.error("请先登录");
-        }
-        String number = jwtUtils.getNumberByToken(token);
-        if (number == null) {
-            return JsonResult.error("Authorization 过期或失效！");
-        }
-        request.setNumber(number);
-        log.info("UserController mockSubjectSelect number:[{}]", number);
         JsonResult response = chooseService.mockSubjectsSelect(request);
 
         return response;
@@ -58,15 +48,6 @@ public class ChooseController {
     public JsonResult reallySubjectsSelect(HttpServletRequest httpServletRequest, @RequestBody User request) {
         log.info("UserController reallySubjectsSelect request:[{}]", request);
         String token = httpServletRequest.getHeader("Authorization");
-        if (token == null || "".equals(token)) {
-            return JsonResult.error("请先登录");
-        }
-        String number = jwtUtils.getNumberByToken(token);
-        if (number == null) {
-            return JsonResult.error("Authorization 过期或失效！");
-        }
-        request.setNumber(number);
-        log.info("UserController mockSubjectSelect number:[{}]", number);
         JsonResult response = chooseService.reallySubjectsSelect(request);
 
         return response;
@@ -184,12 +165,6 @@ public class ChooseController {
 
         return response;
     }
-
-
-    /**
-     * todo:排课表
-     */
-
 
 
 }

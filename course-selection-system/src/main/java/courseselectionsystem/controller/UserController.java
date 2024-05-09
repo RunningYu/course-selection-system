@@ -2,6 +2,7 @@ package courseselectionsystem.controller;
 
 import courseselectionsystem.entity.UploadResponse;
 import courseselectionsystem.entity.UserRequest;
+import courseselectionsystem.entity.vo.KnowledgeRequestVO;
 import courseselectionsystem.service.UserService;
 import courseselectionsystem.utils.JsonResult;
 import courseselectionsystem.utils.JwtUtils;
@@ -61,19 +62,13 @@ public class UserController {
         return response;
     }
 
+    /**
+     * 用户基本信息修改
+     */
     @PostMapping("/user/info/modify")
     public JsonResult userInfoModify(HttpServletRequest httpServletRequest, @RequestBody UserRequest user) {
         log.info("UserController userInfoModify user:[{}]", user);
         String token = httpServletRequest.getHeader("Authorization");
-        if (token == null || "".equals(token)) {
-            return JsonResult.error("请先登录");
-        }
-        String number = jwtUtils.getNumberByToken(token);
-        if (number == null) {
-            return JsonResult.error("Authorization 过期或失效！");
-        }
-        user.setNumber(number);
-        log.info("UserController userInfoModify number:[{}]", number);
         userService.userInfoModify(user);
 
         return JsonResult.success();
@@ -83,12 +78,9 @@ public class UserController {
      * 知识文件分享
      */
     @PostMapping("/knowledge/share")
-    public JsonResult knowledgeShare(@RequestParam("file") MultipartFile file,
-                                     @RequestParam("fileName") String fileName,
-                                     @RequestParam("author") String author,
-                                     @RequestParam("subject") String subject) {
-        log.info("UserController knowledgeShare file:[{}], fileName:[{}], author:[{}], subject:[{}]", file, fileName, author, subject);
-        JsonResult response = userService.knowledgeShare(file, fileName, author, subject);
+    public JsonResult knowledgeShare(@RequestBody KnowledgeRequestVO request) {
+        log.info("UserController knowledgeShare file:[{}], fileName:[{}], author:[{}], subject:[{}]", request.getFile(), request.getFileName(), request.getAuthor(), request.getSubject());
+        JsonResult response = userService.knowledgeShare( request.getFile(), request.getFileName(), request.getAuthor(), request.getSubject());
 
         return response;
     }

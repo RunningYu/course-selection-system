@@ -1,8 +1,6 @@
 package courseselectionsystem.service;
 
 import courseselectionsystem.entity.User;
-import courseselectionsystem.entity.vo.MockSubjectsVO;
-import courseselectionsystem.entity.vo.ReallySubjectsVO;
 import courseselectionsystem.utils.JsonResult;
 
 /**

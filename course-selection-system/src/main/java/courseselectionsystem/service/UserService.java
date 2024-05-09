@@ -16,7 +16,7 @@ public interface UserService {
 
     JsonResult userInfo(String number);
 
-    JsonResult knowledgeShare(MultipartFile file, String fileName, String author, String subject);
+    JsonResult knowledgeShare(String file, String fileName, String author, String subject);
 
     JsonResult knowledgeList(String subject, int page, int page1);
 
